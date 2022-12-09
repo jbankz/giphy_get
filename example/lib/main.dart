@@ -106,6 +106,7 @@ class _MyHomePageState extends State<MyHomePage> {
             setState(() {
               currentGif = gif;
             });
+            print('Tapped');
           });
 
           return Scaffold(
@@ -154,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             gif: currentGif,
                             giphyGetWrapper: giphyGetWrapper,
                             borderRadius: BorderRadius.circular(30),
-                            showGiphyLabel: true,
+                            showGiphyLabel: false,
                           ),
                         )
                       : const Text("No GIF")
@@ -163,7 +164,15 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             floatingActionButton: FloatingActionButton(
                 onPressed: () async {
-                  giphyGetWrapper.getGif('', context);
+                  giphyGetWrapper.getGif('', context,
+                      configMain: ConfigMain(
+                          configSearchBar: ConfigSearchBar(
+                              borderRadius: 20,
+                              showPrefix: false,
+                              showSuffix: false),
+                          configTab: ConfigTab(
+                            tabTopColor: Colors.green,
+                          )));
                 },
                 tooltip: 'Open Sticker',
                 child: const Icon(Icons

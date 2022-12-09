@@ -4,9 +4,13 @@ import 'package:giphy_get/src/client/models/type.dart';
 import 'package:giphy_get/src/providers/tab_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'config/tab_config.dart';
+
 class GiphyTabBar extends StatefulWidget {
   final TabController tabController;
-  const GiphyTabBar({Key? key, required this.tabController}) : super(key: key);
+  final ConfigTab? configTab;
+  const GiphyTabBar({Key? key, required this.tabController, this.configTab})
+      : super(key: key);
 
   @override
   _GiphyTabBarState createState() => _GiphyTabBarState();
@@ -15,18 +19,13 @@ class GiphyTabBar extends StatefulWidget {
 class _GiphyTabBarState extends State<GiphyTabBar> {
   late TabProvider _tabProvider;
   late List<Tab> _tabs;
-  
 
   @override
   void initState() {
     super.initState();
 
-    
-
     // TabProvider
     _tabProvider = Provider.of<TabProvider>(context, listen: false);
-
-    
 
     //  Listen Tab Controller
     widget.tabController.addListener(() {
@@ -68,10 +67,12 @@ class _GiphyTabBarState extends State<GiphyTabBar> {
     _tabProvider = Provider.of<TabProvider>(context);
 
     return TabBar(
-      unselectedLabelColor: Theme.of(context).brightness == Brightness.light
-          ? Colors.black54
-          : Colors.white54,
-      labelColor: _tabProvider.tabColor ?? Theme.of(context).colorScheme.secondary,
+      unselectedLabelColor: widget.configTab?.unselectedTabTextColor ??
+          (Theme.of(context).brightness == Brightness.light
+              ? Colors.black54
+              : Colors.white54),
+      labelColor: widget.configTab?.selectedTabTextColor ??
+          (_tabProvider.tabColor ?? Theme.of(context).colorScheme.secondary),
       indicatorColor: Colors.transparent,
       indicatorSize: TabBarIndicatorSize.label,
       controller: widget.tabController,

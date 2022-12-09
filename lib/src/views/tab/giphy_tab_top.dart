@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'config/tab_config.dart';
+
 class GiphyTabTop extends StatefulWidget {
-  GiphyTabTop({Key? key}) : super(key: key);
+  GiphyTabTop({this.configTab, Key? key}) : super(key: key);
+
+  final ConfigTab? configTab;
 
   @override
   State<GiphyTabTop> createState() => _GiphyTabTopState();
@@ -14,7 +18,8 @@ class _GiphyTabTopState extends State<GiphyTabTop> {
       margin: EdgeInsets.symmetric(vertical: 8.0),
       width: 50,
       height: 2,
-      color: Theme.of(context).textTheme.bodyText1!.color!,
+      color: widget.configTab?.tabTopColor ??
+          Theme.of(context).textTheme.bodyText1!.color!,
     );
   }
 }
