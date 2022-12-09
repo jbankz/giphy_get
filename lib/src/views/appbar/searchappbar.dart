@@ -10,11 +10,16 @@ import 'package:giphy_get/src/providers/sheet_provider.dart';
 import 'package:giphy_get/src/providers/tab_provider.dart';
 import 'package:provider/provider.dart';
 
+import 'config/config_searchbar.dart';
+
 class SearchAppBar extends StatefulWidget {
   // Scroll Controller
   final ScrollController scrollController;
 
-  SearchAppBar({Key? key, required this.scrollController}) : super(key: key);
+  SearchAppBar({Key? key, required this.scrollController, this.configSearchBar})
+      : super(key: key);
+
+  final ConfigSearchBar? configSearchBar;
 
   @override
   _SearchAppBarState createState() => _SearchAppBarState();
@@ -95,28 +100,39 @@ class _SearchAppBarState extends State<SearchAppBar> {
                 height: 40,
                 child: Center(
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(
+                        widget.configSearchBar?.borderRadius ?? 0),
                     child: TextField(
                       textAlignVertical: TextAlignVertical.center,
                       autofocus: _sheetProvider.initialExtent ==
                           SheetProvider.maxExtent,
                       focusNode: _focus,
                       controller: _textEditingController,
+                      cursorColor: widget.configSearchBar?.cursorColor,
                       decoration: InputDecoration(
                         filled: true,
-                        prefixIcon: _searchIcon(),
+                        fillColor: widget.configSearchBar?.fillColor,
+                        prefixIcon: (widget.configSearchBar?.showPrefix ??
+                                false)
+                            ? (widget.configSearchBar?.prefix ?? _searchIcon())
+                            : null,
                         hintText: l.searchInputLabel,
-                        suffixIcon: IconButton(
-                            icon: Icon(
-                              Icons.clear,
-                              color:
-                                  Theme.of(context).textTheme.bodyText1!.color!,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _textEditingController.clear();
-                              });
-                            }),
+                        suffixIcon:
+                            (widget.configSearchBar?.showSuffix ?? false)
+                                ? IconButton(
+                                    icon: Icon(
+                                      Icons.clear,
+                                      color: Theme.of(context)
+                                          .textTheme
+                                          .bodyText1!
+                                          .color!,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _textEditingController.clear();
+                                      });
+                                    })
+                                : null,
                         focusedBorder: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         errorBorder: InputBorder.none,

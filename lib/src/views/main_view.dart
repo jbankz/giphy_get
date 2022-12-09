@@ -7,8 +7,12 @@ import 'package:giphy_get/src/views/tab/giphy_tab_top.dart';
 import 'package:giphy_get/src/views/tab/giphy_tab_view.dart';
 import 'package:provider/provider.dart';
 
+import 'config/config_main.dart';
+
 class MainView extends StatefulWidget {
-  MainView({Key? key}) : super(key: key);
+  MainView({this.config, Key? key}) : super(key: key);
+
+  final ConfigMain? config;
 
   @override
   _MainViewState createState() => _MainViewState();
@@ -64,17 +68,19 @@ class _MainViewState extends State<MainView>
   Widget _bottomSheetBody() => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          GiphyTabTop(),
+          GiphyTabTop(configTab: widget.config?.configTab),
           GiphyTabBar(
-            tabController: _tabController,
-          ),
-          SearchAppBar(scrollController: this._scrollController),
+              tabController: _tabController,
+              configTab: widget.config?.configTab),
+          SearchAppBar(
+              scrollController: this._scrollController,
+              configSearchBar: widget.config?.configSearchBar),
           Expanded(
               child: GiphyTabView(
             tabController: _tabController,
             scrollController: this._scrollController,
           )),
-          GiphyTabBottom()
+          if (widget.config?.configTab?.showPoweredBy ?? false) GiphyTabBottom()
         ],
       );
 }

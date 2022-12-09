@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:giphy_get/src/views/appbar/config/config_searchbar.dart';
+import 'package:giphy_get/src/views/config/config_main.dart';
 
 import '../../giphy_get.dart';
 
@@ -23,14 +25,20 @@ class GiphyGetWrapper extends StatelessWidget {
     return builder(streamController.stream, this);
   }
 
-  getGif(String queryText, BuildContext context) async {
+  getGif(String queryText, BuildContext context,
+      {ConfigMain? configMain}) async {
     GiphyGif? gif = await GiphyGet.getGif(
-      queryText: queryText,
-      context: context,
-      apiKey: giphy_api_key, //YOUR API KEY HERE
-      lang: GiphyLanguage.spanish,
-    );
-    if (gif != null) streamController.add(gif);
+        queryText: queryText,
+        context: context,
+        apiKey: giphy_api_key, //YOUR API KEY HERE
+        lang: GiphyLanguage.spanish,
+        radius: configMain?.radius ?? 10,
+        config: configMain);
+    if (gif != null) {
+      streamController.add(gif);
+      if (configMain?.callback != null) configMain?.callback!();
+    }
+
     // stream.add(gif!);
   }
 }
